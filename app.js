@@ -6,48 +6,54 @@ $("document").ready(function() {
     var channels = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp",
                      "storbeck", "habathcx", "RobotCaleb",
                       "noobs2ninjas", "comster404"]; 
+                      
 
-    var channel_results = []; // store acquired channel info here
-    var user_results = []; // for users
 
-    for (i = 0; i < channels.length; i++) {
+    function addStreamInfo(stream_object){
+     
 
-        // get info from channels through the twitch API
+        $('.streamers-title').append(
+            "<li class='w3-padding'>"
+            + "<img src='" + stream_object.stream.channel.logo
+            + "' class='w3-left w3-circle w3-margin-right' style='width:50px'>"
+            + "<span class='w3-large'>" + "<a href='"
+            + stream_object.stream.channel.url 
+            + "' target='_blank'>" 
+            + stream_object.stream.channel.display_name 
+            + "</a></span><br>"
+            + "<span>" + stream_object.stream.channel.status + "</span>"
+        );
+    }
 
-        $.ajax('https://wind-bow.gomix.me/twitch-api/streams/' + channels[i] + '?callback=?',
+    
+    function getAPIInfo(group, channels){
+        
+        $.ajax('https://wind-bow.gomix.me/twitch-api/' + group + '/' + channels[i] + '?callback=?',
                {
                    'method': 'GET',
                    'data': {
                        'format': 'json',
                    },
                    'dataType': 'jsonp',
-                   'success': function(data) {
-                       channel_results.push(data);
-                                        
-                   }
+                   'success': (data) => {addStreamInfo(data);}
                });
-
-        // get info from users through the twitch API
-
-      $.ajax('https://wind-bow.gomix.me/twitch-api/users/' + channels[i] + '?callback=?',
-        {
-            'method': 'GET',
-            'data': {
-                'format': 'JSON',
-            },
-            'async': 'false',
-            'dataType': 'jsonp',
-            'success': function(data) {
-                user_results.push(data);
-               
-            }
-        });
     }
 
-    console.log(user_results + "jj");
-    channel_results.forEach(function(element){
-        console.log(element);
 
-    });
+  /*  function fetchAPIInfo(group, channels, new_results) {
+        fetch('https://wind-bow.gomix.me/twitch-api/' + group + '/' + channels[i] + '?callback=?')
+        .then((response) => {response.json()})
+        .then((data) => {
+            new_results.push(data);
+            console.log(data);
+        });
+    }
+*/
+
+
+    for (i = 0; i < channels.length; i++) {
+        getAPIInfo('streams', channels); 
+        
+    }
 
 });
