@@ -58,12 +58,19 @@ $("document").ready(function() {
 
             var logo, status, user, url;
 
-        
-            
-            if (stream_object.stream == null){
-                console.log("stream is null YEP YEP");
+           console.log(user_object);
+          
+            if (user_object.status === 422){
+                  status = "-";
+                  url = "#"; 
+                  user =  user_object.message;
+                  logo = user_object.logo;  
+
+            }
+
+            else if (stream_object.stream == null){
                 status = "offline";
-                url = "offline"; 
+                url = "https://twitch.tv/" + user_object.name; 
                 user =  user_object.display_name;
                 logo = user_object.logo;       
             }
@@ -75,6 +82,8 @@ $("document").ready(function() {
                 user = user_object.display_name;
                 url = stream_object.stream.channel.url;
             }
+
+
                 
             $('.streamers-title').append(
                 "<li class='w3-padding'>"
@@ -88,10 +97,5 @@ $("document").ready(function() {
                 + "<span>" + status + "</span>"
             );
     }
-
-    function addUserInfo(user_object){
-
-    }
     
-
 });
