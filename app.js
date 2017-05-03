@@ -9,51 +9,89 @@ $("document").ready(function() {
                       
 
 
-    function addStreamInfo(stream_object){
-     
+    
 
-        $('.streamers-title').append(
-            "<li class='w3-padding'>"
-            + "<img src='" + stream_object.stream.channel.logo
-            + "' class='w3-left w3-circle w3-margin-right' style='width:50px'>"
-            + "<span class='w3-large'>" + "<a href='"
-            + stream_object.stream.channel.url 
-            + "' target='_blank'>" 
-            + stream_object.stream.channel.display_name 
-            + "</a></span><br>"
-            + "<span>" + stream_object.stream.channel.status + "</span>"
-        );
+
+    for (i = 0; i < channels.length; i++) {
+        getAPIInfo('streams','users', channels[i]); 
+        
     }
 
+
+
+
+        // functions
+
     
-    function getAPIInfo(group, channels){
+    function getAPIInfo(group1, group2, channel){
         
-        $.ajax('https://wind-bow.gomix.me/twitch-api/' + group + '/' + channels[i] + '?callback=?',
+        $.ajax('https://wind-bow.gomix.me/twitch-api/' + group1 + '/' + channel + '?callback=?',
                {
                    'method': 'GET',
                    'data': {
                        'format': 'json',
                    },
                    'dataType': 'jsonp',
-                   'success': (data) => {addStreamInfo(data);}
-               });
+                   'success': (data) => {
+                       var streamData = data;
+                       
+                       // get user info
+                        $.ajax('https://wind-bow.gomix.me/twitch-api/' + group2 + '/' + channel + '?callback=?',
+                            {
+                                'method': 'GET',
+                                'data': {
+                                    'format': 'json',
+                                },
+                                'dataType': 'jsonp',
+                                'success': (data) => {
+                                    userData = data;
+                                    addStreamInfo(streamData, userData);
+                       
+                                     }
+                        });
+                } });
     }
 
 
-  /*  function fetchAPIInfo(group, channels, new_results) {
-        fetch('https://wind-bow.gomix.me/twitch-api/' + group + '/' + channels[i] + '?callback=?')
-        .then((response) => {response.json()})
-        .then((data) => {
-            new_results.push(data);
-            console.log(data);
-        });
-    }
-*/
 
+       function addStreamInfo(stream_object, user_object){
 
-    for (i = 0; i < channels.length; i++) {
-        getAPIInfo('streams', channels); 
+            var logo, status, user, url;
+
         
+            
+            if (stream_object.stream == null){
+                console.log("stream is null YEP YEP");
+                status = "offline";
+                url = "offline"; 
+                user =  user_object.display_name;
+                logo = user_object.logo;       
+            }
+
+            else {
+
+                logo = user_object.logo;
+                status = stream_object.stream.channel.status; 
+                user = user_object.display_name;
+                url = stream_object.stream.channel.url;
+            }
+                
+            $('.streamers-title').append(
+                "<li class='w3-padding'>"
+                + "<img src='" + logo
+                + "' class='w3-left w3-circle w3-margin-right' style='width:50px'>"
+                + "<span class='w3-large'>" + "<a href='"
+                + url 
+                + "' target='_blank'>" 
+                + user
+                + "</a></span><br>"
+                + "<span>" + status + "</span>"
+            );
     }
+
+    function addUserInfo(user_object){
+
+    }
+    
 
 });
