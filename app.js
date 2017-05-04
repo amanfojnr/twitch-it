@@ -53,7 +53,7 @@ $("document").ready(function() {
 
 
         // fixed logo error
-        
+
         function fixLogoError(user_object_logo){
                 var logo;
 
@@ -73,7 +73,6 @@ $("document").ready(function() {
 
             var logo, status, user, url;
 
-           console.log(user_object);
           
             if (user_object.status === 422){
                   status = "-";
@@ -99,7 +98,7 @@ $("document").ready(function() {
                 user = user_object.display_name;
                 url = stream_object.stream.channel.url;
                 class_status = "offline";
-                logo = fixLogoError(user_object_logo);
+                logo = fixLogoError(user_object.logo);
             }
 
 
