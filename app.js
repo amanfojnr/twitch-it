@@ -21,7 +21,6 @@ $("document").ready(function() {
 
 
         // functions
-
     
     function getAPIInfo(group1, group2, channel){
         
@@ -53,6 +52,22 @@ $("document").ready(function() {
     }
 
 
+        // fixed logo error
+        
+        function fixLogoError(user_object_logo){
+                var logo;
+
+                if (user_object_logo == null){
+                    logo = "https://s22.postimg.org/e8tf320ep/error-image.png"; 
+                }
+
+                else {
+                     logo = user_object_logo;
+                }                  
+                return logo;
+        }
+
+       // adds streamers info to html
 
        function addStreamInfo(stream_object, user_object){
 
@@ -64,7 +79,8 @@ $("document").ready(function() {
                   status = "-";
                   url = "#"; 
                   user =  user_object.message;
-                  logo = user_object.logo;  
+                  logo = "https://s22.postimg.org/e8tf320ep/error-image.png"; 
+                  class_status = "offline"; 
 
             }
 
@@ -72,21 +88,24 @@ $("document").ready(function() {
                 status = "offline";
                 url = "https://twitch.tv/" + user_object.name; 
                 user =  user_object.display_name;
-                logo = user_object.logo;       
+                class_status = "offline";
+                logo = fixLogoError(user_object.logo);  
+     
             }
 
             else {
 
-                logo = user_object.logo;
                 status = stream_object.stream.channel.status; 
                 user = user_object.display_name;
                 url = stream_object.stream.channel.url;
+                class_status = "offline";
+                logo = fixLogoError(user_object_logo);
             }
 
 
                 
             $('.streamers-title').append(
-                "<li class='w3-padding'>"
+                "<li class=" + "w3-padding " + class_status + ">"
                 + "<img src='" + logo
                 + "' class='w3-left w3-circle w3-margin-right' style='width:50px'>"
                 + "<span class='w3-large'>" + "<a href='"
